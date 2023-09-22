@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cccccc</title>
+</head>
+<style>
+    .btn button {
+        border-radius: 50%;
+    }
+    #imgs1 {
+        width: 200px;
+        height: 100px;
+    }
+    #number {
+        display: flex;
+        justify-content: space-around;
+    }
+    .image-card-choose {
+        background-color: rgb(43, 36, 36);
+        color: white;
+    }
+</style>
+<body>
+    <ul id="number">
+    </ul>
+    <div class="btn">
+    </div>
+    <button onclick="renderpre()">pre</button>
+    <button onclick="rendernext()">next</button>
+    <input type="text" id="search" oninput="searchMonAn()" placeholder="search">
+    <script>
+        let image = "";
+        let arr = ["../img/banhxeo.jpg", "../img/banhtom.jpeg", "../img/bun.jpg", "../img/bunca.jpg",
+            "../img/buncham.jpg", "../img/bundau.jpg", "../img/bunhaisan.jpg", "../img/buntom.jpg", "../img/comsuon.jpg"
+            , "../img/comtam.jpg", "../img/ech.jpg"];
+        let renderArr=arr;
+        let start;
+        let end;
+        let tranghientai = 1;
+        let soitemtrentrang = 3;
+        let tongsotrang = Math.ceil(arr.length / soitemtrentrang);
+        // function tinh diem bat dau diem ket thuc
+        function render(totalPage) {
+            start = (totalPage - 1) * soitemtrentrang;
+            end = totalPage * soitemtrentrang;
+        }
+        render(1)
+        // funtion in ra anh
+        function renderphantu(hieu) {
+            let text = ""
+            for (let i = 0; i < hieu.length; i++) {
+                if (start <= i && i < end) {
+                    text +=
+                        `
+                        <img src="${hieu[i]}" alt="" id="imgs1">
+                        <p>ten mon an:${hieu[i]}</p>
+                `
+                }
+            } document.getElementById("number").innerHTML = text;
+
+        }
+        renderphantu(arr);
+        // function render so trang
+        function renderbtn(params) {
+            let btn = "";
+            for (let i = 1; i <= params; i++) {
+                btn +=
+                    `
+                  <button onclick="chossebtn(${i})" class="btnss" id="btns">${i}</button>
+                  `
+            }
+            document.getElementsByClassName("btn")[0].innerHTML = btn;
+            if(document.getElementsByClassName("btnss")[0]==undefined){
+                return;
+            }
+            document.getElementsByClassName("btnss")[0].classList.add("image-card-choose");
+        }
+        renderbtn(tongsotrang);
+        // function in ra nut
+        function chossebtn(params) {
+            tranghientai = params
+            render(tranghientai);
+            renderphantu(renderArr);
+            image = params;
+            let imageCards = document.getElementsByClassName("btnss");
+            for (let i = 0; i < imageCards.length; i++) {
+                if (i + 1 == params) {
+                    imageCards[i].classList.add("image-card-choose");
+                } else {
+                    imageCards[i].classList.remove("image-card-choose");
+                }
+            }
+        }
+        //funcion cho the pre
+        function renderpre() {
+            if (tranghientai > 1) {
+                tranghientai--;
+                chossebtn(tranghientai);
+                render(tranghientai);
+            }
+        }
+        //funcion cho the next
+        function rendernext() {
+            if (tranghientai < tongsotrang) {
+                tranghientai++;
+                chossebtn(tranghientai);
+                render(tranghientai);
+            }
+        }
+        // funtion tim kiem mon an
+        function searchMonAn() {
+            let search = document.getElementById("search").value;
+            let result = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i].indexOf(search) != -1) {
+                    result.push(arr[i]);
+                }
+            }
+            tongsotrang=Math.ceil(result.length / soitemtrentrang);
+            renderbtn(tongsotrang)
+            renderphantu(result);
+            renderArr=result
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .btn button {
+        border-radius: 50%;
+    }
+    .image-card-choose{
+        background-color: brown;
+        color: white;
+    }
+</style>
+
+<body>
+    <ul id="number">
+    </ul>
+    <div class="btn"> 
+        //.innerHTML=...(class them[0])
+
+    </div>
+    <button onclick="renderpre()">pre</button>
+    <button onclick="rendernext()">next</button>
+    
+    <script>
+        let imgse=""
+        let start; //phan tu bat dau 
+        let end;    // phan tu ket thuc
+        let currentPage = 1;     // trang hien tai
+        let itemPerPage = 5;    //tong so item tren 1 trang
+        let arrNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,12,11,30,22];
+
+        let totalPage = Math.ceil(arrNumbers.length / itemPerPage);      //tong so trang (Math.ceil lam tron so)
+        
+        function getItem(params) {
+            start = (params - 1) * itemPerPage;
+            end = params * itemPerPage;
+            
+        }
+        getItem(1)
+        //function render san pham
+        function render() {
+            let text = "";
+            for (let i = 0; i < arrNumbers.length; i++) {
+               if(start<=i&&i<end){
+                text +=
+                    `
+                 <li >${arrNumbers[i]}</li>  
+                `
+               }
+            }
+            document.getElementById("number").innerHTML = text;
+        }
+        render();
+        // renderlistpage so trang
+        function renderListPage() {
+            let button = ""
+            for (let i = 1; i <= totalPage; i++) {
+                
+                    button +=
+                        `
+                     <button onclick="choosePage(${i})" class="buttomPage">${i}</button>
+                    `
+              
+            } document.getElementsByClassName("btn")[0].innerHTML = button;
+            document.getElementsByClassName("buttomPage")[0].classList.add("image-card-choose")
+        }
+        renderListPage();
+       
+        function choosePage(nowPage) {
+            
+            currentPage = nowPage;
+            getItem(currentPage);
+            render();
+             imgse=nowPage
+             let imagenow=document.getElementsByClassName("buttomPage")
+             for (let i = 0; i < imagenow.length; i++) {
+                if(i+1==nowPage){
+                    imagenow[i].classList.add("image-card-choose");
+                }else{
+                    imagenow[i].classList.remove("image-card-choose");
+                }
+             }
+        }
+        function rendernext() {
+            
+            if (currentPage<totalPage) {
+                currentPage++;
+                choosePage(currentPage);
+                getItem(currentPage)
+            }
+        }
+        function renderpre() {
+            if ( currentPage>1) {
+                currentPage--;
+                choosePage(currentPage)
+                 getItem(currentPage)
+            }
+        }
+    </script>
+</body>
+
+</html>
